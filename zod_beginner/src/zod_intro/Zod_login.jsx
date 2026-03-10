@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 // import { email, z, ZodError } from "zod";
 // import './LearnZod'
 import {useForm} from 'react-hook-form'
+import {z} from 'zod'
+import {zodResolver} from '@hookform/resolvers/zod'
 
 const Zod_login = () => {
 
@@ -12,10 +14,11 @@ const Zod_login = () => {
 
     // const [errors, setErrors] = useState({});
 
-    // const zodSchema = z.object({
-    //     email: z.string().trim().pipe(z.email("email is not valid bro")),
-    //     password: z.string().trim().min(6,"minimum 6 chars are required").max(10,"maximum 10 chars are allowed")
-    // })
+    const zodSchema = z.object({
+        email: z.string().trim().pipe(z.email("email is not valid bro")),
+        password: z.string().trim().min(6,"minimum 6 chars are required").max(10,"maximum 10 chars are allowed"),
+        age: z.number().min(18).optional()
+    })
 
 //    function handleFormSubmit(e){
 //       e.preventDefault();
@@ -55,14 +58,17 @@ const Zod_login = () => {
     // }
     // console.log(data);
 
-    const {register, handleSubmit, reset,watch, formState: {isDirty, errors, isSubmitting, isValid}} = useForm({defaultValues: {
+    const {register, handleSubmit, reset,watch, formState: {isDirty, errors, isSubmitting, isValid}} = useForm(
+        {defaultValues: {
         email: "satya@gmail.com",
         password: "sdjpw"
-    }});
+        }, 
+    resolver:  zodResolver(zodSchema),
+    shouldUnregister: true});
 
     // console.log("errors: ",errors)
     const [ email, isAdult ] = watch(["email","isAdult"]);
-    console.log(email)
+    // console.log(email)
   return (
     <div>
       <h1>Zod login</h1>
@@ -71,13 +77,14 @@ const Zod_login = () => {
             Email 
             <input 
             type="email"
-            {...register("email", {
+            {...register("email"
+                /*,{
                 required: "Email is required",
                 pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     message: "Email is not valid bro"
-                }
-            })}
+                }}*/
+            )}
             // name="email" 
             // value={data.email}
             // onChange={handleInputUpdate} 
@@ -89,13 +96,15 @@ const Zod_login = () => {
             Password
             <input 
             type='password'
-            {...register("password", {
+            {...register("password"
+               /*  ,{
                 required: "Password is required",
                 minLength: {
                     value: 4,
                     message: "Too short, add at least 4 chars..."
                 }
-            })}
+            }*/
+        )}
             // name='password' 
             // value={data.password}
             // onChange={handleInputUpdate}
@@ -108,7 +117,7 @@ const Zod_login = () => {
             <br />
             {isAdult && <label>
                 Age
-                <input type="number" {...register("age")} />
+                <input type="number" {...register("age", {valueAsNumber: true})} />
             </label>}
         {errors.password && <p>{errors.password.message}</p>}
         <br />
