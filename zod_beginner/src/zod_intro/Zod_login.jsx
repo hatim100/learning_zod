@@ -54,7 +54,15 @@ const Zod_login = () => {
     //     setData({...data, [name]: value});
     // }
     // console.log(data);
-    const {register, handleSubmit} = useForm();
+
+    const {register, handleSubmit, reset,watch, formState: {isDirty, errors, isSubmitting}} = useForm({defaultValues: {
+        email: "satya@gmail.com",
+        password: "sdjpw"
+    }});
+
+    // console.log("errors: ",errors)
+    const [ email, isAdult ] = watch(["email","isAdult"]);
+    console.log(email)
   return (
     <div>
       <h1>Zod login</h1>
@@ -63,27 +71,51 @@ const Zod_login = () => {
             Email 
             <input 
             type="email"
-            {...register("email")}
+            {...register("email", {
+                required: "Email is required",
+                pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Email is not valid bro"
+                }
+            })}
             // name="email" 
             // value={data.email}
             // onChange={handleInputUpdate} 
             />
         </label>
-        {/* {errors.email && <p>{errors.email}</p>} */}
+        {errors.email && <p>{errors.email.message}</p>}
         <br />
         <label>
             Password
             <input 
             type='password'
-            {...register("password")}
+            {...register("password", {
+                required: "Password is required",
+                minLength: {
+                    value: 4,
+                    message: "Too short, add at least 4 chars..."
+                }
+            })}
             // name='password' 
             // value={data.password}
             // onChange={handleInputUpdate}
             />
         </label>
-        {/* {errors.password && <p>{errors.password}</p>} */}
         <br />
-        <button>Submit</button>
+            <label>Are you above 18?
+                <input type="checkbox" {...register("isAdult")}/>
+            </label>
+            <br />
+            {isAdult && <label>
+                Age
+                <input type="number" {...register("age")} />
+            </label>}
+        {errors.password && <p>{errors.password.message}</p>}
+        <br />
+        <button disabled={!isDirty || isSubmitting}>Submit</button>
+        <button type="button" onClick={() => reset({
+            email:"",password:""
+        })}>Reset</button>
       </form>
     </div>
   )
