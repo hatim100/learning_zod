@@ -55,7 +55,7 @@ const Zod_login = () => {
     // }
     // console.log(data);
 
-    const {register, handleSubmit, reset,watch, formState: {isDirty, errors, isSubmitting}} = useForm({defaultValues: {
+    const {register, handleSubmit, reset,watch, formState: {isDirty, errors, isSubmitting, isValid}} = useForm({defaultValues: {
         email: "satya@gmail.com",
         password: "sdjpw"
     }});
@@ -112,7 +112,7 @@ const Zod_login = () => {
             </label>}
         {errors.password && <p>{errors.password.message}</p>}
         <br />
-        <button disabled={!isDirty || isSubmitting}>Submit</button>
+        <button disabled={!isValid || isSubmitting}>Submit</button>
         <button type="button" onClick={() => reset({
             email:"",password:""
         })}>Reset</button>
