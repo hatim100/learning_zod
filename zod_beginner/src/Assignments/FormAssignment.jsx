@@ -42,6 +42,13 @@ const FormAssignment = () => {
         console.log("Form Data ", formData);
     }
 
+    function handleFocus(e){
+        e.target.style.border = "2px solid red";
+    }
+    function handleBlur(e){
+        e.target.style.border = "1px solid yellowgreen";
+    }
+
   function handleReset() {
     setFormData({
       name: "",
@@ -61,36 +68,45 @@ const FormAssignment = () => {
   return (
    <form onSubmit={handleSubmit} className='pl-4'>
     <h2>React form assignment</h2>
+    <div className='flex flex-col gap-1'>
     <FormRow label="Name">
-    <input
+    <input className='border border-gray-500 p-0.5 focus:outline-none'
     type="text"
     name='name'
     value={formData.name}
+    onFocus={handleFocus}
+    onBlur={handleBlur}
     onChange={handleChange}
     placeholder='Enter name' />
     </FormRow>
     <FormRow label="Password">
-      <input 
+      <input className = 'border border-gray-500 p-0.5 focus:outline-none'
       type="password"
       name='password'
       value={formData.password}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
       onChange={handleChange}
       placeholder='Enter password' />
     </FormRow>
     <FormRow label="Email">
-        <input 
+        <input className = 'border border-gray-500 p-0.5 focus:outline-none'
         type="email"
         name='email'
         value={formData.email}
         onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
         placeholder='Enter email' />
     </FormRow>
-    <FormRow label="Age">
-        <input 
+    <FormRow label="Age" >
+        <input className = 'border border-gray-500 p-0.5 focus:outline-none'
         type="number"
         name='age'
         value={formData.age}
         onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
         placeholder='Enter Age' />
     </FormRow>
     <FormRow label="Birth Date">
@@ -159,9 +175,14 @@ const FormAssignment = () => {
     </select>
     </FormRow>
     <FormRow label="Message">
-        <textarea 
-        name="message" value={formData.message} onChange={handleChange}></textarea>
+        <textarea className = 'border border-gray-500 p-0.5 focus:outline-none'
+        name="message" 
+        value={formData.message} 
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}></textarea>
     </FormRow>
+    </div>
     <div className='flex flex-row gap-2 mt-1'>
     <button className='px-3 py-2 bg-amber-300 rounded-md' type='submit'>Submit</button>
     <button className='px-3 py-2 bg-gray-500 text-white rounded-md' type='button' onClick={handleReset}>Reset</button>
